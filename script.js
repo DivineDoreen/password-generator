@@ -1,122 +1,107 @@
-const passwordLength = document.getElementById("passwordLength");
-const copyButton = document.getElementById("copyButton");
+const generatorForm = document.forms["password-generator-form"];
+const passwordLengthInput = document.querySelector("#password-length");
+const passwordOutputInput = document.querySelector("#password-output");
+const copyButton = document.querySelector("#copy-btn");
+const checkboxes = document.querySelectorAll("input[type='checkbox']");
+
+function handleFormSubmission(e) {
+    e.preventDefault();
+
+    const generatedPassword = generatePassword();
+    const passwordStrength = checkStrength(generatedPassword);
+
+    updateStrength(passwordStrength);
+    passwordOutputInput.value = generatedPassword;
+}
 
 function generatePassword() {
-  const length = passwordLength.value;
+    const passwordLength = parseInt(passwordLengthInput.value);
+    const options = [];
+    let password = "";
+    const charactersObj = {
+        uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        lowercase: "abcdefghijklmnopqrstuvwxyz",
+        numbers: "0123456789",
+        symbols: "~!@#$%^&*()_+"
+    };
 
-  if (length < 6 || length > 20) {
-    alert("Password length must be greater than 6 or less than 20");
-    return;
-  }
+    if (Number.isNaN(passwordLength)) return alert("Please enter a number");
+    if (passwordLength < 6 || passwordLength > 20)
+        return alert("Password length must be greater than 6 or less than 20");
+    if (!Array.from(checkboxes).some((checkbox) => checkbox.checked)) return alert("Please select at least one option");
 
-  let characters = "";
-  let password = "";
+    checkboxes.forEach((checkbox) => checkbox.checked && options.push(checkbox.id));
 
-  const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const lowercase = "abcdefghijklmnopqrstuvwxyz";
-  const numbers = "0123456789";
-  const symbols = "~!@#$%^&*()_+";
+    for (let i = 0; i < passwordLength; i++) {
+        if (i < options.length) {
+            password += charactersObj[options[i]].charAt(Math.floor(Math.random() * charactersObj[options[i]].length));
+        } else {
+            const randomOption = options[Math.floor(Math.random() * options.length)];
+            const randomOptionCharacters = charactersObj[randomOption];
+            const randomCharacter = randomOptionCharacters.charAt(
+                Math.floor(Math.random() * randomOptionCharacters.length)
+            );
 
-  const useUppercase = document.getElementById("useUppercase").checked;
-  const useLowercase = document.getElementById("useLowercase").checked;
-  const useNumbers = document.getElementById("useNumbers").checked;
-  const useSymbols = document.getElementById("useSymbols").checked;
+            password += randomCharacter;
+        }
+    }
 
-  if (useUppercase) characters += uppercase;
-  if (useLowercase) characters += lowercase;
-  if (useNumbers) characters += numbers;
-  if (useSymbols) characters += symbols;
-
-  if (characters === "") {
-    alert("Please select atleast one option");
-    return;
-  }
-
-  if (useUppercase) {
-    password += uppercase[Math.floor(Math.random() * uppercase.length)];
-  }
-  if (useLowercase) {
-    password += lowercase[Math.floor(Math.random() * lowercase.length)];
-  }
-  if (useNumbers) {
-    password += numbers[Math.floor(Math.random() * numbers.length)];
-  }
-  if (useSymbols) {
-    password += symbols[Math.floor(Math.random() * symbols.length)];
-  }
-
-  for (let i = password.length; i < length; i++) {
-    password += characters[Math.floor(Math.random() * characters.length)];
-  }
-
-  password = shufflePassword(password);
-
-  document.getElementById("passwordOutput").value = password;
-
-  const strength = checkStrength(password);
-  updateStrength(strength);
-
-  copyButton.addEventListener("click", () => {
-    navigator.clipboard
-      .writeText(password)
-      .then(() => alert("Password copied"))
-      .catch(() => alert("error copying password", err));
-  });
+    return shufflePassword(password);
 }
 
 function shufflePassword(password) {
-  return password
-    .split("")
-    .sort(() => Math.random() - 0.5)
-    .join("");
+    let passwordArray = password.split("");
+
+    for (let i = 0; i < Math.floor(passwordArray.length / 2); i++) {
+        let randomIndex = Math.floor(Math.random() * passwordArray.length);
+        let charAtRandIndex = passwordArray[randomIndex];
+        let charAtOriginalIndex = passwordArray[i];
+
+        passwordArray[i] = charAtRandIndex;
+        passwordArray[randomIndex] = charAtOriginalIndex;
+    }
+
+    return passwordArray.join("");
 }
 
 function checkStrength(password) {
-  length = passwordLength.value;
-
-  const hasUppercase = /[A-Z]/.test(password);
-  const hasLowercase = /[a-z]/.test(password);
-  const hasNumbers = /\d/.test(password);
-  const hasSymbols = /[~!@#$%^&*()_+]/.test(password);
-
-  if (
-    length >= 12 &&
-    hasUppercase &&
-    hasLowercase &&
-    hasNumbers &&
-    hasSymbols
-  ) {
-    return "strong";
-  }
-  if (
-    length >= 8 &&
-    hasUppercase &&
-    hasLowercase &&
-    (hasNumbers || hasSymbols)
-  ) {
-    return "medium";
-  } else {
-    return "weak";
-  }
+    switch (true) {
+        case password.length >= 12 && /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+~]).{12,}$/.test(password):
+            return "strong";
+        case password.length >= 8 && /^(?=.*([a-z]|[A-Z]))(?=.*([0-9]|[!@#$%^&*()_+~])).{8,}$/.test(password):
+            return "medium";
+        default:
+            return "weak";
+    }
 }
 
 function updateStrength(strength) {
-  const strengthText = document.getElementById("strengthText");
-  const strengthBar = document.getElementById("strengthBar");
+    const strengthText = document.querySelector("#strength-text");
+    const strengthBar = document.querySelector("#strength-bar");
 
-  if (strength === "strong") {
-    strengthText.textContent = "strong";
-    strengthBar.style.width = "100%";
-    strengthBar.style.backgroundColor = "green";
-  }
-  if (strength === "medium") {
-    strengthText.textContent = "medium";
-    strengthBar.style.width = "66%";
-    strengthBar.style.backgroundColor = "orange";
-  }
-  if (strength === "weak") {
-    strengthText.textContent = "weak";
-    strengthBar.style.width = "33%";
-    strengthBar.style.backgroundColor = "red";
-  }
+    strengthText.textContent = strength.toUpperCase();
+
+    if (strength === "strong") {
+        strengthBar.style.width = "100%";
+        strengthBar.style.backgroundColor = "green";
+    } else if (strength === "medium") {
+        strengthBar.style.width = "66%";
+        strengthBar.style.backgroundColor = "orange";
+    } else {
+        strengthBar.style.width = "33%";
+        strengthBar.style.backgroundColor = "red";
+    }
 }
+
+function copyPassword(e) {
+    try {
+        window.navigator.clipboard.writeText(passwordOutputInput.value);
+        e.target.textContent = "Copied!";
+        setTimeout(() => (e.target.textContent = "Copy"), 500);
+    } catch {
+        alert("Failed to copy password");
+    }
+}
+
+generatorForm.addEventListener("submit", handleFormSubmission);
+copyButton.addEventListener("click", copyPassword);

@@ -1,127 +1,139 @@
 * {
-    padding: 0;
     margin: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    box-sizing: 0;
+    border: 0;
+    padding: 0;
+    font-family: "Roboto Mono", "Courier New", Courier, monospace;
 }
 
 body {
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-  color: #fff;
-  animation: pageLoad 1s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  padding: 20px;
+    min-height: 100vh;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-image: radial-gradient(circle at center, rgb(127, 0, 121), rgb(0, 0, 64));
 }
 
-@keyframes pageLoad {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-.password-generator {
-    background: #1e1e2f;
-    padding: 10px 20px;
-    border-radius: 15px;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25);
-    max-width: 400px;
+main {
+    max-width: 500px;
     width: 100%;
+    padding: 1rem;
+    border-radius: 1rem;
+    color: #ddd;
+    box-shadow: 0 0 25px rgba(38, 0, 38, 0.463);
+    background-color: rgb(105, 0, 100);
 }
 
-.password-generator h1 {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
+h1 {
+    margin-bottom: 1.5rem;
 }
 
-input[type='text'],
-input[type='number'] {
-    width: 80%;
-    padding: 7px;
-    border: none;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    font-size: 0.9rem;
-    color: #000;
-    background-color: #ffffff;
+form > *:not(:last-child) {
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+input#password-length,
+input#password-output {
+    background-color: rgba(255, 255, 255, 0.227);
+    padding: 4px;
+    min-width: none;
+    max-width: none;
+    border-radius: 4px;
+    width: 100px;
     outline: none;
+    color: white;
 }
 
-#copyButton {
-    background: #2575fc;
-    border: none;
-    color: #fff;
-    padding: 8px 14px;
-    font-size: 0.9rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-#copyButton:hover {
-    background: #6a11cb;
-}
-
-#passwordLength {
-  width: 150px;
-}
-
-.strength-bar {
-  background: #333;  
-  height: 10px;
-  border-radius: 5px;
-  margin: 15px 0;
-  overflow: hidden;
-}
-
-.strength-bar span {
-  display: block;
-  height: 100%;
-  transition: width 0.5s ease, background-color 0.5s ease;
-}
-
-input[type='checkbox'] {
-    margin-bottom: 10px;
-    text-align: left;
-}
-
-.generate-btn {
+input#password-output {
     width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background: linear-gradient(90deg, #6a11cb, #2575fc);
-    color: #fff;
-    font-size: 1rem;
+}
+
+input#password-length::placeholder {
+    color: #aaa;
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    margin-right: 0.5rem;
+    position: relative;
+}
+
+input[type="checkbox"]::after {
+    content: "";
+    position: absolute;
+    height: 1rem;
+    width: 1rem;
+    background-color: rgb(255, 160, 252);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -90%);
+}
+
+input[type="checkbox"]::before {
+    content: "";
+    position: absolute;
+    height: 0.6rem;
+    width: 0.6rem;
+    background-color: rgb(255, 0, 119);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -117%) scale(0);
+    z-index: 10;
+}
+
+input[type="checkbox"]:checked::before {
+    transform: translate(-50%, -118%) scale(1);
+}
+
+#submit-btn,
+#copy-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    margin-top: 1rem;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: 0.3s linear all;
 }
 
-.generate-btn:hover {
-    transform: scale(1.1);
+#submit-btn:active,
+#copy-btn:active {
+    transform: scale(0.95);
 }
 
+#output-container {
+    display: flex;
+    gap: 0.2rem;
+    margin-top: 1rem;
+    align-items: center;
+}
 
-@media (max-width: 480px) {
-    .password-generator {
-        padding: 15px 20px;
-    }
+#output-container input#password-output {
+    flex: 1;
+    padding: 0.5rem;
+}
 
-    #passwordLength {
-        width: 55%;
-    }
+#output-container #copy-btn {
+    margin-top: 0;
+    width: 88px;
+}
 
-    .password-generator h1 {
-        font-size: 1.5rem;
+#strength-bar-container {
+    height: 10px;
+    width: 100%;
+    background: #ddd;
+    border-radius: 5px;
+    margin-top: 5px;
+    overflow: hidden;
+}
 
-    }
-
-    .generate-btn {
-        font-size: 0.9rem;
-    }
+#strength-bar-container span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: red;
+    transition: width 0.3s, background-color 0.3s;
 }
