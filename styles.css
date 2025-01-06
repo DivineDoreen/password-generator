@@ -1,0 +1,127 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: #fff;
+  animation: pageLoad 1s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+@keyframes pageLoad {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.password-generator {
+    background: #1e1e2f;
+    padding: 10px 20px;
+    border-radius: 15px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25);
+    max-width: 400px;
+    width: 100%;
+}
+
+.password-generator h1 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+input[type='text'],
+input[type='number'] {
+    width: 80%;
+    padding: 7px;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: #000;
+    background-color: #ffffff;
+    outline: none;
+}
+
+#copyButton {
+    background: #2575fc;
+    border: none;
+    color: #fff;
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#copyButton:hover {
+    background: #6a11cb;
+}
+
+#passwordLength {
+  width: 150px;
+}
+
+.strength-bar {
+  background: #333;  
+  height: 10px;
+  border-radius: 5px;
+  margin: 15px 0;
+  overflow: hidden;
+}
+
+.strength-bar span {
+  display: block;
+  height: 100%;
+  transition: width 0.5s ease, background-color 0.5s ease;
+}
+
+input[type='checkbox'] {
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.generate-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.generate-btn:hover {
+    transform: scale(1.1);
+}
+
+
+@media (max-width: 480px) {
+    .password-generator {
+        padding: 15px 20px;
+    }
+
+    #passwordLength {
+        width: 55%;
+    }
+
+    .password-generator h1 {
+        font-size: 1.5rem;
+
+    }
+
+    .generate-btn {
+        font-size: 0.9rem;
+    }
+}
