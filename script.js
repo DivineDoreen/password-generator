@@ -1,6 +1,20 @@
 const passwordLength = document.getElementById("passwordLength");
 const copyButton = document.getElementById("copyButton");
 
+copyButton.addEventListener("click", () => {
+    password = document.getElementById('passwordOutput').value;
+
+    if (!password) {
+        alert('No password to copy!');
+        return;
+    }
+
+    navigator.clipboard
+      .writeText(password)
+      .then(() => alert("Password copied"))
+      .catch((err) => alert("error copying password", err));
+  });
+
 function generatePassword() {
   const length = passwordLength.value;
 
@@ -55,13 +69,6 @@ function generatePassword() {
 
   const strength = checkStrength(password);
   updateStrength(strength);
-
-  copyButton.addEventListener("click", () => {
-    navigator.clipboard
-      .writeText(password)
-      .then(() => alert("Password copied"))
-      .catch(() => alert("error copying password", err));
-  });
 }
 
 function shufflePassword(password) {
